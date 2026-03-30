@@ -46,19 +46,15 @@ if [ -z "$VAULT_BANNER" ]; then
   echo
 fi
 
-# Auto-start or attach tmux on SSH sessions
+# Auto-start or attach tmux for interactive sessions
 if command -v tmux >/dev/null 2>&1; then
-  if [ -n "$SSH_CONNECTION" ] && [ -z "$TMUX" ]; then
+  if [ -z "$TMUX" ]; then
     SESSION="vault"
 
-    tmux has-session -t $SESSION 2>/dev/null
-
-    if [ $? != 0 ]; then
-      tmux new-session -s $SESSION
+    if tmux has-session -t "$SESSION" 2>/dev/null; then
+      exec tmux attach -t "$SESSION"
     else
-      tmux attach -t $SESSION
+      exec tmux new-session -s "$SESSION"
     fi
-
-    return
   fi
 fi
