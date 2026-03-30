@@ -7,7 +7,18 @@ fi
 export VAULT_LOADED=1
 
 # Prompt (safe for all terminals)
-PS1='\e[1;32m[VAULT@\h \W]\$\e[0m '
+case "$(hostname)" in
+  theblacklodge)
+    COLOR="31" ;;  # red
+  thewhitelodge)
+    COLOR="36" ;;  # cyan
+  pacard-sawmill)
+    COLOR="32" ;;  # green
+  *)
+    COLOR="32" ;;
+esac
+
+PS1="\e[1;${COLOR}m[VAULT@\h \W]\$\e[0m "
 
 # Helpers
 cyberdeck_net() {
