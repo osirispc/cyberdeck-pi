@@ -1,5 +1,11 @@
 # Vault Cyberdeck Layer
 
+# Only run in interactive shells
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 # Prevent double-loading
 if [ -n "$VAULT_LOADED" ]; then
   return
