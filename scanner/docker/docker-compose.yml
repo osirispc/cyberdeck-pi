@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+
+  # 🎧 Web SDR (browser-based radio)
+  openwebrx:
+    image: jketterl/openwebrx:latest
+    container_name: openwebrx
+    restart: unless-stopped
+    ports:
+      - "8073:8073"
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+    volumes:
+      - ../config:/var/lib/openwebrx
+
+  # 🌐 Simple dashboard
+  scanner-web:
+    image: python:3.11-slim
+    container_name: scanner-web
+    working_dir: /app
+    volumes:
+      - ../web:/app
+    command: bash -c "pip install flask && python app.py"
+    ports:
+      - "5005:5000"
