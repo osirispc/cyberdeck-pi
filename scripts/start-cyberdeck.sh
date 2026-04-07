@@ -1,12 +1,33 @@
-cyberdeck_status() {
-    echo "========================================"
-    echo " VAULT-TEC FIELD TERMINAL"
-    echo "========================================"
-    echo " Hostname : $(hostname)"
-    echo " Uptime   : $(uptime -p 2>/dev/null)"
-    echo " CPU Load : $(uptime | awk -F'load average:' '{print $2}')"
-    echo " Memory   : $(free -h | awk '/Mem:/ {print $3 "/" $2}')"
-    echo " Disk     : $(df -h / | awk 'NR==2 {print $3 "/" $2}')"
-    echo " IP       : $(hostname -I | awk '{print $1}')"
-    echo "========================================"
-}
+#!/bin/bash
+
+SESSION="cyberdeck"
+
+tmux kill-session -t $SESSION 2>/dev/null
+
+tmux new-session -d -s $SESSION -n main
+
+# Pane 1 — System Stats
+tmux send-keys -t $SESSION "htop" C-m
+
+# Split horizontally
+tmux split-window -h -t $SESSION
+
+# Pane 2 — Sync Log
+tmux send-keys -t $SESSION "tail -f ~/cyberdeck/sync.log" C-m
+
+# Split bottom left
+tmux split-window -v -t $SESSION:0.0
+
+# Pane 3 — Docker Containers
+tmux send-keys -t $SESSION "watch docker ps" C-m
+
+# Split bottom right
+tmux split-window -v -t $SESSION:0.1
+
+# Pane 4 — Network + IP
+tmux send-keys -t $SESSION "watch -n 2 hostname -I" C-m
+
+# Layout
+tmux select-layout tiled
+
+tmux attach-session -t $SESSION
