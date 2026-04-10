@@ -3,7 +3,7 @@ import tkinter as tk
 import pygame
 
 root = tk.Tk()
-root.title("VK TEST")
+root.title("VOIGHT-KAMPFF")
 root.configure(bg="black")
 root.attributes("-fullscreen", True)
 
@@ -30,6 +30,7 @@ except Exception as e:
     click_sound = None
     alert_sound = None
 
+
 def play_click():
     if AUDIO_OK and click_sound is not None:
         try:
@@ -37,12 +38,14 @@ def play_click():
         except Exception:
             pass
 
+
 def play_alert():
     if AUDIO_OK and alert_sound is not None:
         try:
             alert_sound.play()
         except Exception:
             pass
+
 
 def start_ambient():
     if AUDIO_OK:
@@ -53,11 +56,13 @@ def start_ambient():
         except Exception:
             pass
 
+
 def update_display():
     if current_input:
-        label.config(text=current_input)
+        display_label.config(text=current_input)
     else:
-        label.config(text="VK TEST WINDOW")
+        display_label.config(text="READY")
+
 
 def add_digit(digit):
     global current_input
@@ -65,11 +70,14 @@ def add_digit(digit):
     play_click()
     update_display()
 
+
 def clear_input(event=None):
     global current_input
     current_input = ""
     play_alert()
     update_display()
+    status_label.config(text="INPUT CLEARED")
+
 
 def backspace_input(event=None):
     global current_input
@@ -78,9 +86,19 @@ def backspace_input(event=None):
         play_click()
         update_display()
 
+
+def begin_test(event=None):
+    play_click()
+    if current_input:
+        status_label.config(text=f"TEST IN PROGRESS : {current_input}")
+    else:
+        status_label.config(text="TEST IN PROGRESS")
+
+
 def close_app(event=None):
     play_alert()
     root.after(200, root.destroy)
+
 
 def on_key(event):
     key = event.keysym
@@ -91,29 +109,120 @@ def on_key(event):
         backspace_input()
     elif key.lower() == "c":
         clear_input()
+    elif key in ("Return", "KP_Enter"):
+        begin_test()
+
 
 root.bind("<Escape>", close_app)
 root.bind("<Key>", on_key)
+root.protocol("WM_DELETE_WINDOW", close_app)
 
-label = tk.Label(
+title_label = tk.Label(
     root,
-    text="VK TEST WINDOW",
+    text="VOIGHT-KAMPFF TEST CONSOLE",
     fg="red",
     bg="black",
-    font=("Courier", 24)
+    font=("Courier", 24, "bold")
 )
-label.pack(expand=True)
+title_label.pack(pady=(30, 10))
+
+status_label = tk.Label(
+    root,
+    text="STANDBY",
+    fg="red",
+    bg="black",
+    font=("Courier", 16)
+)
+status_label.pack(pady=(0, 20))
+
+display_label = tk.Label(
+    root,
+    text="READY",
+    fg="red",
+    bg="black",
+    font=("Courier", 36, "bold"),
+    width=12,
+    height=2,
+    relief="solid",
+    bd=2
+)
+display_label.pack(pady=10)
 
 help_label = tk.Label(
     root,
-    text="0-9 = input   BACKSPACE = delete   C = clear   ESC = exit",
+    text="KEYBOARD: 0-9 | BACKSPACE = DELETE | C = CLEAR | ENTER = BEGIN | ESC = EXIT",
     fg="red",
     bg="black",
-    font=("Courier", 14)
+    font=("Courier", 12)
 )
-help_label.pack(pady=20)
+help_label.pack(pady=(0, 20))
 
-root.after(2400, start_ambient)
-root.after(5000, lambda: None)
+keypad_frame = tk.Frame(root, bg="black")
+keypad_frame.pack(pady=10)
 
+button_style = {
+    "font": ("Courier", 20, "bold"),
+    "bg": "black",
+    "fg": "red",
+    "activebackground": "black",
+    "activeforeground": "red",
+    "width": 6,
+    "height": 2,
+    "bd": 2,
+    "highlightbackground": "red",
+    "highlightcolor": "red",
+}
+
+buttons = [
+    ("1", lambda: add_digit("1")),
+    ("2", lambda: add_digit("2")),
+    ("3", lambda: add_digit("3")),
+    ("4", lambda: add_digit("4")),
+    ("5", lambda: add_digit("5")),
+    ("6", lambda: add_digit("6")),
+    ("7", lambda: add_digit("7")),
+    ("8", lambda: add_digit("8")),
+    ("9", lambda: add_digit("9")),
+    ("CLEAR", clear_input),
+    ("0", lambda: add_digit("0")),
+    ("BACK", backspace_input),
+]
+
+for index, (text, command) in enumerate(buttons):
+    row = index // 3
+    col = index % 3
+    btn = tk.Button(
+        keypad_frame,
+        text=text,
+        command=command,
+        **button_style
+    )
+    btn.grid(row=row, column=col, padx=10, pady=10)
+
+begin_button = tk.Button(
+    root,
+    text="BEGIN",
+    command=begin_test,
+    font=("Courier", 20, "bold"),
+    bg="black",
+    fg="red",
+    activebackground="black",
+    activeforeground="red",
+    width=20,
+    height=2,
+    bd=2,
+    highlightbackground="red",
+    highlightcolor="red",
+)
+begin_button.pack(pady=25)
+
+audio_started = False
+
+def kick_off_audio():
+    global audio_started
+    if not audio_started:
+        audio_started = True
+        start_ambient()
+
+root.after(2400, kick_off_audio)
 root.mainloop()
