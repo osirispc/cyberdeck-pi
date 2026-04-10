@@ -7,7 +7,19 @@ root.title("VOIGHT-KAMPFF")
 root.configure(bg="black")
 root.attributes("-fullscreen", True)
 
+mode = "idle"
+subject_id = ""
 current_input = ""
+question_index = 0
+answers = []
+
+questions = [
+    "You see a tortoise on its back in the desert. Rate your concern from 1 to 9.",
+    "Describe your reaction to a crying child. Rate empathy from 1 to 9.",
+    "A wasp lands on your arm. Rate your calm response from 1 to 9.",
+    "Your mother gives you a gift. Rate your emotional response from 1 to 9.",
+    "You find a wallet full of money. Rate your urge to return it from 1 to 9.",
+]
 
 # --- AUDIO SETUP ---
 try:
@@ -57,42 +69,132 @@ def start_ambient():
             pass
 
 
-def update_display():
-    if current_input:
+def update_ui():
+    if mode == "idle":
+        status_label.config(text="STANDBY")
+        question_label.config(text="ENTER SUBJECT ID")
+        begin_button.config(text="BEGIN")
+        if current_input:
+            display_label.config(text=current_input)
+        else:
+            display_label.config(text="READY")
+
+    elif mode == "question":
+        status_label.config(
+            text=f"SUBJECT: {subject_id}   QUESTION {question_index + 1}/{len(questions)}"
+        )
+        question_label.config(text=questions[question_index])
+        begin_button.config(text="NEXT")
+        if current_input:
+            display_label.config(text=current_input)
+        else:
+            display_label.config(text="ENTER 1-9")
+
+    elif mode == "result":
+        begin_button.config(text="RESET")
+        question_label.config(text="EVALUATION COMPLETE")
         display_label.config(text=current_input)
-    else:
-        display_label.config(text="READY")
 
 
 def add_digit(digit):
     global current_input
-    current_input += digit
-    play_click()
-    update_display()
+
+    if mode == "idle":
+        current_input += digit
+        play_click()
+        update_ui()
+        return
+
+    if mode == "question":
+        if digit in "123456789":
+            current_input = digit
+            play_click()
+            update_ui()
 
 
 def clear_input(event=None):
     global current_input
-    current_input = ""
-    play_alert()
-    update_display()
-    status_label.config(text="INPUT CLEARED")
+
+    if mode in ("idle", "question"):
+        current_input = ""
+        play_alert()
+        update_ui()
 
 
 def backspace_input(event=None):
     global current_input
-    if current_input:
+
+    if mode == "idle" and current_input:
         current_input = current_input[:-1]
         play_click()
-        update_display()
+        update_ui()
+    elif mode == "question" and current_input:
+        current_input = ""
+        play_click()
+        update_ui()
 
 
-def begin_test(event=None):
-    play_click()
-    if current_input:
-        status_label.config(text=f"TEST IN PROGRESS : {current_input}")
-    else:
-        status_label.config(text="TEST IN PROGRESS")
+def calculate_result():
+    if not answers:
+        return "INCONCLUSIVE"
+
+    avg = sum(answers) / len(answers)
+
+    if avg >= 7:
+        return "HUMAN"
+    if avg >= 4:
+        return "INCONCLUSIVE"
+    return "REPLICANT SUSPECT"
+
+
+def begin_or_next(event=None):
+    global mode, subject_id, question_index, current_input, answers
+
+    if mode == "idle":
+        if not current_input:
+            status_label.config(text="ENTER SUBJECT ID FIRST")
+            play_alert()
+            return
+
+        subject_id = current_input
+        current_input = ""
+        question_index = 0
+        answers = []
+        mode = "question"
+        play_click()
+        update_ui()
+        return
+
+    if mode == "question":
+        if not current_input:
+            status_label.config(text="ENTER RESPONSE 1-9")
+            play_alert()
+            return
+
+        answers.append(int(current_input))
+        current_input = ""
+        play_click()
+
+        if question_index < len(questions) - 1:
+            question_index += 1
+            update_ui()
+        else:
+            result = calculate_result()
+            mode = "result"
+            status_label.config(text=f"SUBJECT: {subject_id}")
+            current_input = result
+            play_alert()
+            update_ui()
+        return
+
+    if mode == "result":
+        mode = "idle"
+        subject_id = ""
+        question_index = 0
+        answers = []
+        current_input = ""
+        play_click()
+        update_ui()
 
 
 def close_app(event=None):
@@ -110,7 +212,7 @@ def on_key(event):
     elif key.lower() == "c":
         clear_input()
     elif key in ("Return", "KP_Enter"):
-        begin_test()
+        begin_or_next()
 
 
 root.bind("<Escape>", close_app)
@@ -133,7 +235,18 @@ status_label = tk.Label(
     bg="black",
     font=("Courier", 16)
 )
-status_label.pack(pady=(0, 20))
+status_label.pack(pady=(0, 15))
+
+question_label = tk.Label(
+    root,
+    text="ENTER SUBJECT ID",
+    fg="red",
+    bg="black",
+    font=("Courier", 18),
+    wraplength=1000,
+    justify="center"
+)
+question_label.pack(pady=(0, 20))
 
 display_label = tk.Label(
     root,
@@ -141,7 +254,7 @@ display_label = tk.Label(
     fg="red",
     bg="black",
     font=("Courier", 36, "bold"),
-    width=12,
+    width=18,
     height=2,
     relief="solid",
     bd=2
@@ -150,7 +263,7 @@ display_label.pack(pady=10)
 
 help_label = tk.Label(
     root,
-    text="KEYBOARD: 0-9 | BACKSPACE = DELETE | C = CLEAR | ENTER = BEGIN | ESC = EXIT",
+    text="KEYBOARD: 0-9 | BACKSPACE = DELETE | C = CLEAR | ENTER = BEGIN/NEXT | ESC = EXIT",
     fg="red",
     bg="black",
     font=("Courier", 12)
@@ -202,7 +315,7 @@ for index, (text, command) in enumerate(buttons):
 begin_button = tk.Button(
     root,
     text="BEGIN",
-    command=begin_test,
+    command=begin_or_next,
     font=("Courier", 20, "bold"),
     bg="black",
     fg="red",
@@ -216,13 +329,6 @@ begin_button = tk.Button(
 )
 begin_button.pack(pady=25)
 
-audio_started = False
-
-def kick_off_audio():
-    global audio_started
-    if not audio_started:
-        audio_started = True
-        start_ambient()
-
-root.after(2400, kick_off_audio)
+update_ui()
+root.after(2400, start_ambient)
 root.mainloop()
