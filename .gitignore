@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Runtime
+vk.log
+reports/
+
+# Local backups / recovery files
+*.bak.*
+*.WORKING.*
+*.empty.*
+*.zero-byte.*
+*.broken.*
+*.pre-ui.*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
