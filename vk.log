@@ -1,0 +1,83 @@
+nohup: ignoring input
+==== Fri 10 Apr 10:44:02 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4647
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 10:44:23 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4669
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 10:46:22 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4748
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 10:53:06 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4838
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 10:55:40 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4899
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 15:05:48 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+Splash started: PID=4461
+Splash stopped
+App exited with code 0
+==== Fri 10 Apr 15:27:52 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/vk-test.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+pygame 2.6.1 (SDL 2.32.4, Python 3.13.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+==== Fri 10 Apr 15:28:13 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/vk-test.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+pygame 2.6.1 (SDL 2.32.4, Python 3.13.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+==== Sat 11 Apr 04:35:39 EDT 2026 ====
+PWD=/home/osirisortiz/projects/voight-kompff
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/vk-test.py
+SPLASH_IMG=/home/osirisortiz/projects/voight-kompff/boot.png
+pygame 2.6.1 (SDL 2.32.4, Python 3.13.5)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+==== Sat 11 Apr 04:51:13 EDT 2026 ====
+DISPLAY=:0
+XAUTHORITY=/home/osirisortiz/.Xauthority
+APP_MAIN=/home/osirisortiz/projects/voight-kompff/voight_kompff.py
